@@ -1,0 +1,845 @@
+!SESSION 2026-10-22 11:52:50.704 -----------------------------------------------
+eclipse.buildId=Version 2.2.0
+java.version=21.0.10
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  D:\Code\CAN analyzer\STM32H755ZI-Q\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 D:\Code\CAN analyzer\STM32H755ZI-Q\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-10-22 11:53:32.446
+!MESSAGE Log4j2 initialized with config file D:\Code\CAN analyzer\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-10-22 11:53:37.371
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.ui 4 4 2026-10-22 11:53:37.874
+!MESSAGE To avoid deadlock while executing Display.syncExec() with argument: com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporter$3@476cfbd4, thread Worker-8: Executing the early startup extensions will interrupt UI thread.
+!SUBENTRY 1 org.eclipse.ui 4 4 2026-10-22 11:53:37.874
+!MESSAGE Worker-8: Executing the early startup extensions thread is an instance of Worker or owns an ILock
+!STACK 0
+java.lang.IllegalStateException: Call stack for thread Worker-8: Executing the early startup extensions
+	at java.management@21.0.10/sun.management.ThreadImpl.dumpThreads0(Native Method)
+	at java.management@21.0.10/sun.management.ThreadImpl.getThreadInfo(ThreadImpl.java:482)
+	at org.eclipse.ui.internal.UILockListener.reportInterruption(UILockListener.java:208)
+	at org.eclipse.ui.internal.UILockListener.interruptUI(UILockListener.java:174)
+	at org.eclipse.ui.internal.PendingSyncExec.waitUntilExecuted(PendingSyncExec.java:92)
+	at org.eclipse.ui.internal.UISynchronizer.syncExec(UISynchronizer.java:145)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:4896)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporter.importProjectImpl(MCUProjectImporter.java:376)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporterStartup.handleArguments(MCUProjectImporterStartup.java:141)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporterStartup.earlyStartup(MCUProjectImporterStartup.java:57)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.runEarlyStartup(EarlyStartupRunnable.java:79)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:55)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:47)
+	at org.eclipse.ui.internal.Workbench$39.run(Workbench.java:2793)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.ui 4 4 2026-10-22 11:53:37.874
+!MESSAGE UI thread waiting on a job or lock.
+!STACK 0
+java.lang.IllegalStateException: Call stack for thread main
+	at java.base@21.0.10/java.lang.Object.wait0(Native Method)
+	at java.base@21.0.10/java.lang.Object.wait(Object.java:366)
+	at org.eclipse.core.internal.jobs.Semaphore.acquire(Semaphore.java:47)
+	at org.eclipse.core.internal.jobs.OrderedLock.doAcquire(OrderedLock.java:200)
+	at org.eclipse.core.internal.jobs.OrderedLock.acquire(OrderedLock.java:131)
+	at org.eclipse.core.internal.jobs.OrderedLock.acquire(OrderedLock.java:102)
+	at org.eclipse.core.internal.jobs.OrderedLock.acquire(OrderedLock.java:87)
+	at org.eclipse.cdt.internal.core.settings.model.xml.XmlProjectDescriptionStorage.getProjectDescription(XmlProjectDescriptionStorage.java:232)
+	at org.eclipse.cdt.internal.core.settings.model.CProjectDescriptionManager.getProjectDescriptionInternal(CProjectDescriptionManager.java:426)
+	at org.eclipse.cdt.internal.core.settings.model.CProjectDescriptionManager.getProjectDescription(CProjectDescriptionManager.java:408)
+	at org.eclipse.cdt.internal.core.settings.model.CProjectDescriptionManager.getProjectDescription(CProjectDescriptionManager.java:402)
+	at org.eclipse.cdt.internal.core.settings.model.CProjectDescriptionManager.getProjectDescription(CProjectDescriptionManager.java:395)
+	at org.eclipse.cdt.make.ui.MakeContentProvider.getSourceEntries(MakeContentProvider.java:411)
+	at org.eclipse.cdt.make.ui.MakeContentProvider.getChildren(MakeContentProvider.java:106)
+	at org.eclipse.cdt.make.ui.MakeContentProvider.hasChildren(MakeContentProvider.java:174)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.isExpandable(AbstractTreeViewer.java:2271)
+	at org.eclipse.jface.viewers.TreeViewer.isExpandable(TreeViewer.java:554)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.isExpandable(AbstractTreeViewer.java:2301)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.updatePlus(AbstractTreeViewer.java:3126)
+	at org.eclipse.jface.viewers.TreeViewer.updatePlus(TreeViewer.java:795)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.createTreeItem(AbstractTreeViewer.java:893)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.updateChildren(AbstractTreeViewer.java:3042)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalRefreshStruct(AbstractTreeViewer.java:2032)
+	at org.eclipse.jface.viewers.TreeViewer.internalRefreshStruct(TreeViewer.java:683)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalRefresh(AbstractTreeViewer.java:2005)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalRefresh(AbstractTreeViewer.java:1962)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalRefresh(AbstractTreeViewer.java:1948)
+	at org.eclipse.jface.viewers.StructuredViewer.lambda$2(StructuredViewer.java:1466)
+	at org.eclipse.jface.viewers.StructuredViewer$$Lambda/0x0000000100836be0.run(Unknown Source)
+	at org.eclipse.jface.viewers.StructuredViewer.preservingSelection(StructuredViewer.java:1395)
+	at org.eclipse.jface.viewers.TreeViewer.preservingSelection(TreeViewer.java:368)
+	at org.eclipse.jface.viewers.StructuredViewer.preservingSelection(StructuredViewer.java:1356)
+	at org.eclipse.jface.viewers.StructuredViewer.refresh(StructuredViewer.java:1466)
+	at org.eclipse.jface.viewers.ColumnViewer.refresh(ColumnViewer.java:521)
+	at org.eclipse.jface.viewers.StructuredViewer.refresh(StructuredViewer.java:1420)
+	at org.eclipse.cdt.make.ui.MakeContentProvider.lambda$0(MakeContentProvider.java:242)
+	at org.eclipse.cdt.make.ui.MakeContentProvider$$Lambda/0x000000010096f880.run(Unknown Source)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4137)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3753)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.block(ModalContext.java:168)
+	at org.eclipse.jface.operation.ModalContext.run(ModalContext.java:370)
+	at org.eclipse.jface.dialogs.ProgressMonitorDialog.run(ProgressMonitorDialog.java:472)
+	at org.eclipse.ui.internal.progress.ProgressMonitorJobsDialog.run(ProgressMonitorJobsDialog.java:231)
+	at org.eclipse.ui.internal.progress.ProgressManager.lambda$26(ProgressManager.java:823)
+	at org.eclipse.ui.internal.progress.ProgressManager$$Lambda/0x0000000100a0ae50.run(Unknown Source)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.ui.internal.progress.ProgressManager.busyCursorWhile(ProgressManager.java:853)
+	at org.eclipse.ui.internal.progress.ProgressManager.busyCursorWhile(ProgressManager.java:832)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporter$3.run(MCUProjectImporter.java:383)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:166)
+	at org.eclipse.ui.internal.UISynchronizer$$Lambda/0x0000000100a0a600.run(Unknown Source)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4137)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3753)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1147)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1038)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:677)
+	at org.eclipse.ui.internal.Workbench$$Lambda/0x0000000100282dd8.run(Unknown Source)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:583)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:185)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:219)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:149)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:115)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:467)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:298)
+	at java.base@21.0.10/java.lang.invoke.DirectMethodHandle$Holder.invokeStatic(DirectMethodHandle$Holder)
+	at java.base@21.0.10/java.lang.invoke.LambdaForm$MH/0x00000001000da800.invoke(LambdaForm$MH)
+	at java.base@21.0.10/java.lang.invoke.LambdaForm$MH/0x00000001000dac00.invokeExact_MT(LambdaForm$MH)
+	at java.base@21.0.10/jdk.internal.reflect.DirectMethodHandleAccessor.invokeImpl(DirectMethodHandleAccessor.java:155)
+	at java.base@21.0.10/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base@21.0.10/java.lang.reflect.Method.invoke(Method.java:580)
+	at app//org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:615)
+	at app//org.eclipse.equinox.launcher.Main.basicRun(Main.java:563)
+	at app//org.eclipse.equinox.launcher.Main.run(Main.java:1415)
+
+!ENTRY org.eclipse.ui 4 4 2026-10-22 11:53:38.899
+!MESSAGE To avoid deadlock while executing Display.syncExec() with argument: com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporter$3@476cfbd4, thread Worker-8: Executing the early startup extensions will interrupt UI thread.
+!SUBENTRY 1 org.eclipse.ui 4 4 2026-10-22 11:53:38.899
+!MESSAGE Worker-8: Executing the early startup extensions thread is an instance of Worker or owns an ILock
+!STACK 0
+java.lang.IllegalStateException: Call stack for thread Worker-8: Executing the early startup extensions
+	at java.management@21.0.10/sun.management.ThreadImpl.dumpThreads0(Native Method)
+	at java.management@21.0.10/sun.management.ThreadImpl.getThreadInfo(ThreadImpl.java:482)
+	at org.eclipse.ui.internal.UILockListener.reportInterruption(UILockListener.java:208)
+	at org.eclipse.ui.internal.UILockListener.interruptUI(UILockListener.java:174)
+	at org.eclipse.ui.internal.PendingSyncExec.waitUntilExecuted(PendingSyncExec.java:92)
+	at org.eclipse.ui.internal.UISynchronizer.syncExec(UISynchronizer.java:145)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:4896)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporter.importProjectImpl(MCUProjectImporter.java:376)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporterStartup.handleArguments(MCUProjectImporterStartup.java:141)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporterStartup.earlyStartup(MCUProjectImporterStartup.java:57)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.runEarlyStartup(EarlyStartupRunnable.java:79)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:55)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:47)
+	at org.eclipse.ui.internal.Workbench$39.run(Workbench.java:2793)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.ui 4 4 2026-10-22 11:53:38.899
+!MESSAGE UI thread waiting on a job or lock.
+!STACK 0
+java.lang.IllegalStateException: Call stack for thread main
+	at java.base@21.0.10/java.lang.Object.wait0(Native Method)
+	at java.base@21.0.10/java.lang.Object.wait(Object.java:366)
+	at org.eclipse.core.internal.jobs.Semaphore.acquire(Semaphore.java:47)
+	at org.eclipse.core.internal.jobs.OrderedLock.doAcquire(OrderedLock.java:200)
+	at org.eclipse.core.internal.jobs.OrderedLock.acquire(OrderedLock.java:131)
+	at org.eclipse.core.internal.jobs.OrderedLock.acquire(OrderedLock.java:102)
+	at org.eclipse.core.internal.jobs.OrderedLock.acquire(OrderedLock.java:87)
+	at org.eclipse.cdt.internal.core.settings.model.xml.XmlProjectDescriptionStorage.getProjectDescription(XmlProjectDescriptionStorage.java:232)
+	at org.eclipse.cdt.internal.core.settings.model.CProjectDescriptionManager.getProjectDescriptionInternal(CProjectDescriptionManager.java:426)
+	at org.eclipse.cdt.internal.core.settings.model.CProjectDescriptionManager.getProjectDescription(CProjectDescriptionManager.java:408)
+	at org.eclipse.cdt.internal.core.settings.model.CProjectDescriptionManager.getProjectDescription(CProjectDescriptionManager.java:402)
+	at org.eclipse.cdt.internal.core.settings.model.CProjectDescriptionManager.getProjectDescription(CProjectDescriptionManager.java:395)
+	at org.eclipse.cdt.make.ui.MakeContentProvider.getSourceEntries(MakeContentProvider.java:411)
+	at org.eclipse.cdt.make.ui.MakeContentProvider.getChildren(MakeContentProvider.java:106)
+	at org.eclipse.cdt.make.ui.MakeContentProvider.hasChildren(MakeContentProvider.java:174)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.isExpandable(AbstractTreeViewer.java:2271)
+	at org.eclipse.jface.viewers.TreeViewer.isExpandable(TreeViewer.java:554)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.isExpandable(AbstractTreeViewer.java:2301)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.updatePlus(AbstractTreeViewer.java:3126)
+	at org.eclipse.jface.viewers.TreeViewer.updatePlus(TreeViewer.java:795)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.createTreeItem(AbstractTreeViewer.java:893)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.updateChildren(AbstractTreeViewer.java:3042)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalRefreshStruct(AbstractTreeViewer.java:2032)
+	at org.eclipse.jface.viewers.TreeViewer.internalRefreshStruct(TreeViewer.java:683)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalRefresh(AbstractTreeViewer.java:2005)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalRefresh(AbstractTreeViewer.java:1962)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalRefresh(AbstractTreeViewer.java:1948)
+	at org.eclipse.jface.viewers.StructuredViewer.lambda$2(StructuredViewer.java:1466)
+	at org.eclipse.jface.viewers.StructuredViewer$$Lambda/0x0000000100836be0.run(Unknown Source)
+	at org.eclipse.jface.viewers.StructuredViewer.preservingSelection(StructuredViewer.java:1395)
+	at org.eclipse.jface.viewers.TreeViewer.preservingSelection(TreeViewer.java:368)
+	at org.eclipse.jface.viewers.StructuredViewer.preservingSelection(StructuredViewer.java:1356)
+	at org.eclipse.jface.viewers.StructuredViewer.refresh(StructuredViewer.java:1466)
+	at org.eclipse.jface.viewers.ColumnViewer.refresh(ColumnViewer.java:521)
+	at org.eclipse.jface.viewers.StructuredViewer.refresh(StructuredViewer.java:1420)
+	at org.eclipse.cdt.make.ui.MakeContentProvider.lambda$0(MakeContentProvider.java:242)
+	at org.eclipse.cdt.make.ui.MakeContentProvider$$Lambda/0x000000010096f880.run(Unknown Source)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4137)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3753)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.block(ModalContext.java:168)
+	at org.eclipse.jface.operation.ModalContext.run(ModalContext.java:370)
+	at org.eclipse.jface.dialogs.ProgressMonitorDialog.run(ProgressMonitorDialog.java:472)
+	at org.eclipse.ui.internal.progress.ProgressMonitorJobsDialog.run(ProgressMonitorJobsDialog.java:231)
+	at org.eclipse.ui.internal.progress.ProgressManager.lambda$26(ProgressManager.java:823)
+	at org.eclipse.ui.internal.progress.ProgressManager$$Lambda/0x0000000100a0ae50.run(Unknown Source)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.ui.internal.progress.ProgressManager.busyCursorWhile(ProgressManager.java:853)
+	at org.eclipse.ui.internal.progress.ProgressManager.busyCursorWhile(ProgressManager.java:832)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporter$3.run(MCUProjectImporter.java:383)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:166)
+	at org.eclipse.ui.internal.UISynchronizer$$Lambda/0x0000000100a0a600.run(Unknown Source)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4137)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3753)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1147)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1038)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:677)
+	at org.eclipse.ui.internal.Workbench$$Lambda/0x0000000100282dd8.run(Unknown Source)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:583)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:185)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:219)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:149)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:115)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:467)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:298)
+	at java.base@21.0.10/java.lang.invoke.DirectMethodHandle$Holder.invokeStatic(DirectMethodHandle$Holder)
+	at java.base@21.0.10/java.lang.invoke.LambdaForm$MH/0x00000001000da800.invoke(LambdaForm$MH)
+	at java.base@21.0.10/java.lang.invoke.LambdaForm$MH/0x00000001000dac00.invokeExact_MT(LambdaForm$MH)
+	at java.base@21.0.10/jdk.internal.reflect.DirectMethodHandleAccessor.invokeImpl(DirectMethodHandleAccessor.java:155)
+	at java.base@21.0.10/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base@21.0.10/java.lang.reflect.Method.invoke(Method.java:580)
+	at app//org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:615)
+	at app//org.eclipse.equinox.launcher.Main.basicRun(Main.java:563)
+	at app//org.eclipse.equinox.launcher.Main.run(Main.java:1415)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-10-22 11:53:43.223
+!MESSAGE Indexed 'STM32H755ZI-Q_CM4' (10 sources, 77 headers) in 3.85 sec: 8,119 declarations; 26,094 references; 4 unresolved inclusions; 1,407 syntax errors; 3,765 unresolved names (9.9%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-10-22 11:53:46.587
+!MESSAGE Indexed 'STM32H755ZI-Q_CM7' (14 sources, 82 headers) in 1.79 sec: 8,671 declarations; 34,315 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 11:53:47.337
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+COM3
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 11:53:47.339
+!MESSAGE port: COM3
+!SESSION 2026-10-22 13:35:46.161 -----------------------------------------------
+eclipse.buildId=Version 2.2.0
+java.version=21.0.10
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  D:\Code\CAN analyzer\STM32H755ZI-Q\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 D:\Code\CAN analyzer\STM32H755ZI-Q\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-10-22 13:35:54.213
+!MESSAGE Log4j2 initialized with config file D:\Code\CAN analyzer\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-10-22 13:36:01.745
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-10-22 13:36:06.316
+!MESSAGE Indexed 'STM32H755ZI-Q_CM4' (10 sources, 100 headers) in 3.81 sec: 10,483 declarations; 38,112 references; 0 unresolved inclusions; 1 syntax errors; 3 unresolved names (0.0062%)
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 13:36:06.317
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+COM3
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 13:36:06.318
+!MESSAGE port: COM3
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-10-22 13:36:09.750
+!MESSAGE Indexed 'STM32H755ZI-Q_CM7' (36 sources, 109 headers) in 3.4 sec: 13,436 declarations; 96,794 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 14:41:53.180
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+COM3
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 14:41:53.181
+!MESSAGE port: COM3
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 14:41:58.887
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+COM3
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 14:41:58.888
+!MESSAGE port: COM3
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-10-22 15:04:29.929
+!MESSAGE Indexed 'STM32H755ZI-Q_CM4' (28 sources, 100 headers) in 2.74 sec: 12,114 declarations; 85,805 references; 0 unresolved inclusions; 1 syntax errors; 3 unresolved names (0.0031%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-10-22 15:04:32.304
+!MESSAGE Indexed 'STM32H755ZI-Q_CM7' (36 sources, 109 headers) in 2.31 sec: 13,436 declarations; 96,793 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 15:43:01.300
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 15:43:45.168
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY org.eclipse.cdt.core 2 0 2026-10-22 15:49:12.600
+!MESSAGE Formatting problem(s) in 'D:\Code\CAN analyzer\STM32H755ZI-Q\CM4\Core\Inc\stm32h7xx_hal_conf.h'
+!SUBENTRY 1 org.eclipse.cdt.core 2 0 2026-10-22 15:49:12.600
+!MESSAGE [511/1] Unexpected token type, expecting:80, actual:Token type=13  image =} offset=19571
+!STACK 0
+org.eclipse.cdt.internal.formatter.AbortFormatting: [511/1] Unexpected token type, expecting:80, actual:Token type=13  image =} offset=19571
+	at org.eclipse.cdt.internal.formatter.Scribe.printNextToken(Scribe.java:1672)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:1308)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.formatDeclaration(CodeFormatterVisitor.java:745)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:720)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTLinkageSpecification.accept(CPPASTLinkageSpecification.java:98)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:1326)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.formatDeclaration(CodeFormatterVisitor.java:745)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:720)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTLinkageSpecification.accept(CPPASTLinkageSpecification.java:98)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.formatDeclarations(CodeFormatterVisitor.java:609)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:551)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:278)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.format(CodeFormatterVisitor.java:496)
+	at org.eclipse.cdt.internal.formatter.CCodeFormatter.formatRegions(CCodeFormatter.java:209)
+	at org.eclipse.cdt.internal.formatter.CCodeFormatter.format(CCodeFormatter.java:174)
+	at org.eclipse.cdt.internal.formatter.CCodeFormatter.format(CCodeFormatter.java:141)
+	at org.eclipse.cdt.internal.corext.util.CodeFormatterUtil.format(CodeFormatterUtil.java:128)
+	at org.eclipse.cdt.internal.ui.text.CFormattingStrategy.format(CFormattingStrategy.java:72)
+	at org.eclipse.jface.text.formatter.MultiPassContentFormatter.formatMaster(MultiPassContentFormatter.java:198)
+	at org.eclipse.jface.text.formatter.MultiPassContentFormatter.format(MultiPassContentFormatter.java:137)
+	at org.eclipse.jface.text.source.SourceViewer.doOperation(SourceViewer.java:1075)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.doOperation(ProjectionViewer.java:1748)
+	at org.eclipse.cdt.internal.ui.editor.CSourceViewer.doOperation(CSourceViewer.java:392)
+	at org.eclipse.cdt.internal.ui.editor.CEditor$AdaptedSourceViewer.doOperation(CEditor.java:354)
+	at org.eclipse.ui.texteditor.TextOperationAction.lambda$0(TextOperationAction.java:134)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.ui.texteditor.TextOperationAction.run(TextOperationAction.java:134)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:124)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.execute(E4HandlerProxy.java:98)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invokeUsingClass(InjectorImpl.java:305)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invoke(InjectorImpl.java:237)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.invoke(ContextInjectionFactory.java:174)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceHandler.execute(HandlerServiceHandler.java:165)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:484)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.executeHandler(HandlerServiceImpl.java:204)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.executeCommand(KeyBindingDispatcher.java:320)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.press(KeyBindingDispatcher.java:580)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.processKeyEvent(KeyBindingDispatcher.java:661)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.filterKeySequenceBindings(KeyBindingDispatcher.java:450)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher$KeyDownFilter.handleEvent(KeyBindingDispatcher.java:104)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:91)
+	at org.eclipse.swt.widgets.Display.filterEvent(Display.java:1342)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1216)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1241)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1226)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1268)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1264)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1747)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4982)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:341)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4859)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:336)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5132)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3748)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1147)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1038)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:677)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:583)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:185)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:219)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:149)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:115)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:467)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:298)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:615)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:563)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1415)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:40:59.051
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:41:37.649
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:43:16.939
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:45:27.043
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:47:26.672
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:48:45.991
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:52:12.260
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:52:26.162
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:52:33.966
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:54:48.141
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:55:29.937
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:56:07.857
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:56:46.055
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-22 16:59:26.128
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 17:06:56.699
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-22 17:06:56.701
+!MESSAGE port: 
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-23 08:56:38.131
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+COM3
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-23 08:56:38.132
+!MESSAGE port: COM3
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 09:21:41.327
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 09:29:03.241
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 10:53:32.605
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 10:53:51.733
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 10:56:28.143
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 10:57:21.342
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 11:38:06.885
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 11:42:36.705
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 11:43:09.036
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:10:36.018
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:13:48.692
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:14:10.452
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:21:35.657
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:23:27.296
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:25:25.124
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:25:40.039
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:27:25.524
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:27:36.789
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:28:05.704
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:29:08.411
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:31:04.664
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:59:22.343
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 12:59:42.205
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY org.eclipse.cdt.core 2 0 2026-10-23 13:13:30.566
+!MESSAGE Formatting problem(s) in 'D:\Code\CAN analyzer\STM32H755ZI-Q\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_fdcan.h'
+!SUBENTRY 1 org.eclipse.cdt.core 2 0 2026-10-23 13:13:30.566
+!MESSAGE [2275/1] Unexpected token type, expecting:80, actual:Token type=13  image =} offset=145563
+!STACK 0
+org.eclipse.cdt.internal.formatter.AbortFormatting: [2275/1] Unexpected token type, expecting:80, actual:Token type=13  image =} offset=145563
+	at org.eclipse.cdt.internal.formatter.Scribe.printNextToken(Scribe.java:1672)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:1308)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.formatDeclaration(CodeFormatterVisitor.java:745)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:720)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTLinkageSpecification.accept(CPPASTLinkageSpecification.java:98)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:1326)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.formatDeclaration(CodeFormatterVisitor.java:745)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:720)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTLinkageSpecification.accept(CPPASTLinkageSpecification.java:98)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.formatDeclarations(CodeFormatterVisitor.java:609)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.visit(CodeFormatterVisitor.java:551)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:278)
+	at org.eclipse.cdt.internal.formatter.CodeFormatterVisitor.format(CodeFormatterVisitor.java:496)
+	at org.eclipse.cdt.internal.formatter.CCodeFormatter.formatRegions(CCodeFormatter.java:209)
+	at org.eclipse.cdt.internal.formatter.CCodeFormatter.format(CCodeFormatter.java:174)
+	at org.eclipse.cdt.internal.formatter.CCodeFormatter.format(CCodeFormatter.java:141)
+	at org.eclipse.cdt.internal.corext.util.CodeFormatterUtil.format(CodeFormatterUtil.java:128)
+	at org.eclipse.cdt.internal.ui.text.CFormattingStrategy.format(CFormattingStrategy.java:72)
+	at org.eclipse.jface.text.formatter.MultiPassContentFormatter.formatMaster(MultiPassContentFormatter.java:198)
+	at org.eclipse.jface.text.formatter.MultiPassContentFormatter.format(MultiPassContentFormatter.java:137)
+	at org.eclipse.jface.text.source.SourceViewer.doOperation(SourceViewer.java:1075)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.doOperation(ProjectionViewer.java:1748)
+	at org.eclipse.cdt.internal.ui.editor.CSourceViewer.doOperation(CSourceViewer.java:392)
+	at org.eclipse.cdt.internal.ui.editor.CEditor$AdaptedSourceViewer.doOperation(CEditor.java:354)
+	at org.eclipse.ui.texteditor.TextOperationAction.lambda$0(TextOperationAction.java:134)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.ui.texteditor.TextOperationAction.run(TextOperationAction.java:134)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:124)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.execute(E4HandlerProxy.java:98)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invokeUsingClass(InjectorImpl.java:305)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invoke(InjectorImpl.java:237)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.invoke(ContextInjectionFactory.java:174)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceHandler.execute(HandlerServiceHandler.java:165)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:484)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.executeHandler(HandlerServiceImpl.java:204)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.executeCommand(KeyBindingDispatcher.java:320)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.press(KeyBindingDispatcher.java:580)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.processKeyEvent(KeyBindingDispatcher.java:661)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.filterKeySequenceBindings(KeyBindingDispatcher.java:450)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher$KeyDownFilter.handleEvent(KeyBindingDispatcher.java:104)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:91)
+	at org.eclipse.swt.widgets.Display.filterEvent(Display.java:1342)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1216)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1241)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1226)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1268)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1264)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1747)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4982)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:341)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4859)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:336)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5132)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3748)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1147)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1038)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:677)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:583)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:185)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:219)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:149)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:115)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:467)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:298)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:615)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:563)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1415)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 15:17:44.335
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-23 15:18:47.455
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-23 16:40:52.105
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-23 16:40:52.106
+!MESSAGE port: 
+!SESSION 2026-10-27 09:32:33.603 -----------------------------------------------
+eclipse.buildId=Version 2.2.0
+java.version=21.0.10
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-10-27 09:32:44.669
+!MESSAGE Log4j2 initialized with config file D:\Code\CAN analyzer\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-10-27 09:32:54.112
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-27 09:32:56.603
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+COM3
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-10-27 09:32:56.604
+!MESSAGE port: COM3
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 11:50:11.621
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 11:53:16.315
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 12:08:12.444
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 12:15:35.942
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 12:16:55.391
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:05:57.567
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:06:57.914
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:08:05.544
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:08:59.088
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:09:05.909
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:12:36.601
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:19:04.627
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:20:35.935
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:25:07.102
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:28:25.002
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:29:09.250
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:34:21.233
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:34:58.650
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:36:10.564
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:41:25.518
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:47:35.447
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:51:04.736
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:51:25.568
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:52:39.658
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:53:01.869
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 14:59:34.454
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 15:00:53.916
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:05:51.124
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:18:31.037
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:19:17.737
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:40:07.730
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:41:41.161
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:42:39.011
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:46:16.131
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:47:14.638
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:53:50.954
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 16:58:55.211
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 17:10:21.435
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 17:11:22.423
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 17:15:02.093
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 17:26:53.405
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 17:27:46.872
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 17:29:08.164
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 17:29:53.894
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 17:30:39.229
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-27 17:31:04.854
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:29:24.255
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:31:09.679
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:31:23.897
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:32:29.030
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:35:04.159
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:35:25.504
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:38:04.796
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:51:52.577
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:52:14.813
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 13:53:05.895
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:00:22.396
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:03:20.309
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:05:26.527
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:08:23.126
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:09:34.090
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:15:00.193
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:23:55.843
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:37:56.285
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:39:06.964
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:39:20.430
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:41:21.109
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:43:17.893
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:43:48.444
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:44:05.244
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:44:44.241
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)
+
+!ENTRY com.st.stm32cube.ide.mcu.toolchain.arm-none.oss 2 2 2026-10-28 14:45:40.735
+!MESSAGE Ignored L/STM32H755ZI-Q_CM4/Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_pwr.c from Makefile generation (invalid resource)

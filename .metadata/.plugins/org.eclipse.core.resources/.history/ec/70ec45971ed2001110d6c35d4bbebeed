@@ -1,0 +1,133 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file    tim.c
+  * @brief   This file provides code for the configuration
+  *          of the TIM instances.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/*------------------------------------------------------------------------------
+ *  Includes
+ * ---------------------------------------------------------------------------*/
+	#include "tim.h"
+	#include "fdcan.h"
+
+/*------------------------------------------------------------------------------
+ *  Global variable
+ * ---------------------------------------------------------------------------*/
+	stTimer stVarTimer;
+
+/*------------------------------------------------------------------------------
+ *  Function definition
+ * ---------------------------------------------------------------------------*/
+/* TIM3 init function */
+void MX_TIM3_Init(void)
+{
+
+  /* Peripheral clock enable */
+  LL_TIM_InitTypeDef TIM_InitStruct = {0};
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
+
+  /* TIM3 interrupt Init */
+  NVIC_SetPriority(TIM3_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 1));
+  NVIC_EnableIRQ(TIM3_IRQn);
+
+  TIM_InitStruct.Prescaler = 99;
+  TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
+  TIM_InitStruct.Autoreload = 999;
+  TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
+  LL_TIM_Init(hdefTIMER, &TIM_InitStruct);
+  LL_TIM_EnableARRPreload(hdefTIMER);
+  LL_TIM_SetClockSource(hdefTIMER, LL_TIM_CLOCKSOURCE_INTERNAL);
+  LL_TIM_SetTriggerOutput(hdefTIMER, LL_TIM_TRGO_RESET);
+  LL_TIM_DisableMasterSlaveMode(hdefTIMER);
+
+  LL_TIM_ClearFlag_UPDATE(hdefTIMER);   /* LL_TIM_Init generates an update event, which sets this flag */
+  LL_TIM_EnableIT_UPDATE(hdefTIMER);    /* enable the update interrupt */
+  LL_TIM_EnableCounter(hdefTIMER);      /* start counting */
+
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	Configure_IWDG
+ **@Descriptions		:	Starts the independent watchdog IWDG1 with a timeout of about 4 s
+ **						(LSI 32 kHz / 32, reload 3999). If it is not refreshed within that
+ **						time, the board resets. Once started it cannot be stopped.
+ **@parameters			:	None
+ **@return				: 	None
+*****************************************************************************/
+void Configure_IWDG(void)
+{
+
+	/* optional, for debugging: stop the watchdog while the core is halted.
+	   Check the exact name in stm32h7xx_ll_dbgmcu.h of your LL version */
+	/* LL_DBGMCU_APB4_GRP1_FreezePeriph(LL_DBGMCU_APB4_GRP1_IWDG1_STOP); */
+
+	LL_IWDG_Enable(IWDG1);                           /* start (also switches the LSI on) */
+	LL_IWDG_EnableWriteAccess(IWDG1);
+	LL_IWDG_SetPrescaler(IWDG1, LL_IWDG_PRESCALER_32);   /* 32 kHz / 32 = 1 kHz */
+	LL_IWDG_SetReloadCounter(IWDG1, 3999);               /* 4000 ticks = 4 s */
+	while (LL_IWDG_IsReady(IWDG1) != 1) { }          /* wait until the values are applied */
+	LL_IWDG_ReloadCounter(IWDG1);                    /* first refresh */
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	Configure_IWDG
+ **@Descriptions		:	Starts the independent watchdog IWDG1 with a timeout of about 4 s
+ **						(LSI 32 kHz / 32, reload 3999). If it is not refreshed within that
+ **						time, the board resets. Once started it cannot be stopped.
+ **@parameters			:	None
+ **@return				: 	None
+*****************************************************************************/
+void FnTimeProcessEvents(void)
+{
+	static uint32_t Identifier = 0x011 ;
+	static uint8_t ui8Data[FDCAN_DLC_BYTES_8] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
+
+	if (stVarTimer.u8TimeFlag_10msec == SET)
+	{   stVarTimer.u8TimeFlag_10msec= RESET;
+		/*reset the watchdog every 10ms*/
+		hdefIWDG_RESET
+		FnFDCANFrameParse();
+	}
+
+	if (stVarTimer.u8TimeFlag_100msec == SET)
+	{   stVarTimer.u8TimeFlag_100msec= RESET;
+
+
+	}
+
+	if (stVarTimer.u8TimeFlag_1sec == SET)
+	{   stVarTimer.u8TimeFlag_1sec= RESET;
+
+		printf("Time=%lu CAN RX=%lu CAN PR=%lu \n\r",
+				stVarTimer.u32TimerCount1sec, stVarCANFD.ui8CANRxFameCount, stVarCANFD.ui8CANRxProcessCount);
+	}
+
+	if (stVarTimer.u32TimerCount1sec % (uint8_t)5 == RESET)
+	{
+
+		FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data); Identifier++;
+		FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data); Identifier++;
+		FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data); Identifier++;
+		FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data); Identifier++;
+		FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data); Identifier++;
+
+	}
+
+}
+
+
+
+
+

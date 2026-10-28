@@ -1,0 +1,146 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file    fdcan.h
+  * @brief   This file contains all the function prototypes for
+  *          the fdcan.c file
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __FDCAN_H__
+#define __FDCAN_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*------------------------------------------------------------------------------
+ *  Includes
+ * ---------------------------------------------------------------------------*/
+	#include "main.h"
+
+/*------------------------------------------------------------------------------
+ *  Hash definitions
+ * ---------------------------------------------------------------------------*/
+	#define defCANFD_MAX_LD (uint8_t)64
+
+	#define CANFD_RX_Pin LL_GPIO_PIN_11
+	#define CANFD_RX_GPIO_Port GPIOA
+
+	#define CANFD_TX_Pin LL_GPIO_PIN_12
+	#define CANFD_TX_GPIO_Port GPIOA
+
+/*------------------------------------------------------------------------------
+ *  Strcture definitions
+ * ---------------------------------------------------------------------------*/
+	typedef union
+	{
+	  int8_t    s8[(uint8_t)64];
+	  uint8_t   u8[(uint8_t)64];
+	  int16_t  s16[(uint8_t)32];
+	  uint16_t u16[(uint8_t)32];
+	  int32_t  s32[(uint8_t)16];
+	  uint32_t u32[(uint8_t)16];
+	  float	   f32[(uint8_t)16];
+	  double   d64[(uint8_t)8];
+	  int64_t  s64[(uint8_t)8];
+	  uint64_t u64[(uint8_t)8];
+	}unConvo64;
+
+	/*to conver the data*/
+	typedef union
+	{
+	  int8_t    s8[(uint8_t)8];
+	  uint8_t   u8[(uint8_t)8];
+	  int16_t  s16[(uint8_t)4];
+	  uint16_t u16[(uint8_t)4];
+	  int32_t  s32[(uint8_t)2];
+	  uint32_t u32[(uint8_t)2];
+	  float	   f32[(uint8_t)2];
+	  double   d64;
+	  int64_t  s64;
+	  uint64_t u64;
+	}unConvo8;
+
+	/*to conver the data*/
+	typedef union
+	{
+	  int8_t    s8[(uint8_t)4];
+	  uint8_t   u8[(uint8_t)4];
+	  int16_t  s16[(uint8_t)2];
+	  uint16_t u16[(uint8_t)2];
+	  int32_t  s32;
+	  uint32_t u32;
+	  float	   f32;
+	}unConvo4;
+
+	/*defined a controlled structure*/
+	typedef struct
+	{
+		/*This flag is to indicate that there is a message in RX buffer*/
+		uint8_t ui8CANRxFameFlag;
+		/*This counter is to indicate that how many messages are there in RX buffer*/
+		uint32_t ui8CANRxFameCount;
+		/*This counter is to indicate that how many messages Processed So far*/
+		uint32_t ui8CANRxProcessCount;
+		/*This counter is to indicate that how many messages are lost*/
+		uint16_t ui8CANRxFameLost;
+
+		/*will be used to convert the CAN ID*/
+		unConvo4 unCANID;
+		/*the converted ID will be stored in scCANID*/
+		char	 scCANID[(uint8_t)16];
+		/*the Data length*/
+		uint8_t  u8CANDataLen;
+		/*the raw Data*/
+		unConvo64 u8CANData;
+
+		/*Reception timestamp*/
+		 uint32_t u32CANTimeHour;
+		 uint32_t u32CANTimeMin;
+		 uint32_t u32CANTimeSec;
+		 uint32_t u32CANTimeMiliSec;
+
+		/*Reception Error State*/
+		uint32_t u32CANErrorStateIndicator;
+
+		/*Convert all data and store in a payload*/
+		uint8_t	 scCANDpayload[(uint8_t)250];
+
+	}stCANFD;
+
+/*------------------------------------------------------------------------------
+ *  External variable
+ * ---------------------------------------------------------------------------*/
+	extern FDCAN_HandleTypeDef hfdcan1;
+	extern FDCAN_RxHeaderTypeDef RxHeader;
+	extern stCANFD stVarCANFD;
+
+
+/*------------------------------------------------------------------------------
+ * function global declaration
+ * ---------------------------------------------------------------------------*/
+	void MX_FDCAN1_Init(void);
+	void FnHALCANFD_Init(void);
+	HAL_StatusTypeDef FnHALCANFD_SendData(uint32_t Identifier, uint8_t DataLength, uint8_t *ui8Data);
+	void FnHALCANFD_ReceiveData(void);
+	void FnFDCANFrameParse(void);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __FDCAN_H__ */
+

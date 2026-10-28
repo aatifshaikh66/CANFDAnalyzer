@@ -1,0 +1,202 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file    stm32h7xx_it.c
+  * @brief   Interrupt Service Routines.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+
+/*------------------------------------------------------------------------------
+ *  Includes
+ * ---------------------------------------------------------------------------*/
+	#include "main.h"
+	#include "stm32h7xx_it.h"
+
+/* Private includes ----------------------------------------------------------*/
+	#include "fdcan.h"
+	#include "tim.h"
+	#include "usart.h"
+
+
+/******************************************************************************/
+/*           Cortex Processor Interruption and Exception Handlers          */
+/******************************************************************************/
+/**
+  * @brief This function handles Non maskable interrupt.
+  */
+void NMI_Handler(void)
+{
+   while (1)
+  {
+
+  }
+
+}
+
+/**
+  * @brief This function handles Hard fault interrupt.
+  */
+void HardFault_Handler(void)
+{
+	printf("{ 'ft': '1','msg':'NUCLEO IS IN HARD FAULT' }");
+	while (1)
+	{  }
+}
+
+/**
+  * @brief This function handles Memory management fault.
+  */
+void MemManage_Handler(void)
+{
+	printf("{ 'ft': '1','msg':'NUCLEO IS IN MEMORY MANAGEMENT FAULT' }");
+	while (1)
+	{  }
+}
+
+/**
+  * @brief This function handles Pre-fetch fault, memory access fault.
+  */
+void BusFault_Handler(void)
+{
+	printf("{ 'ft': '1','msg':'NUCLEO IS IN MEMORY ACCESS FAULT' }");
+	while (1)
+	{  }
+}
+
+/**
+  * @brief This function handles Undefined instruction or illegal state.
+  */
+void UsageFault_Handler(void)
+{
+	printf("{ 'ft': '1','msg':'NUCLEO MADE AN ILLIGAL STATEMENT' }");
+	while (1)
+	{  }
+}
+
+/**
+  * @brief This function handles System service call via SWI instruction.
+  */
+void SVC_Handler(void)
+{
+
+}
+
+/**
+  * @brief This function handles Debug monitor.
+  */
+void DebugMon_Handler(void)
+{
+
+}
+
+/**
+  * @brief This function handles Pendable request for system service.
+  */
+void PendSV_Handler(void)
+{
+
+}
+
+/**
+  * @brief This function handles System tick timer.
+  */
+void SysTick_Handler(void)
+{
+  HAL_IncTick();
+}
+
+/******************************************************************************/
+/* STM32H7xx Peripheral Interrupt Handlers                                    */
+/* Add here the Interrupt Handlers for the used peripherals.                  */
+/* For the available peripheral interrupt handler names,                      */
+/* please refer to the startup file (startup_stm32h7xx.s).                    */
+/******************************************************************************/
+
+/**
+  * @brief This function handles FDCAN1 interrupt 0.
+  */
+void FDCAN1_IT0_IRQHandler(void)
+{
+  HAL_FDCAN_IRQHandler(&hfdcan1);
+}
+
+/**
+  * @brief This function handles TIM3 global interrupt.
+  */
+void TIM3_IRQHandler(void)
+{
+/* Check whether update interrupt is pending */
+if( LL_TIM_IsActiveFlag_UPDATE(hdefTIMER) == SET )
+	{
+	/* Clear the update interrupt flag*/
+	LL_TIM_ClearFlag_UPDATE(hdefTIMER);
+
+	/*Check every 1ms*/
+	FnUsartCheckINTR( );
+
+	stVarTimer.u8TimerCount1ms++;
+
+	if (stVarTimer.u8TimerCount1ms >= (uint8_t)10)
+	{
+		stVarTimer.u8TimerCount1ms  = RESET;
+		stVarTimer.u8TimeFlag_10msec= SET;
+	    stVarTimer.u8TimerCount10ms++;
+	}
+
+	if (stVarTimer.u8TimerCount10ms >= (uint8_t)10)
+	{
+		stVarTimer.u8TimerCount10ms  = RESET;
+		stVarTimer.u8TimeFlag_100msec= SET;
+	    stVarTimer.u8TimerCount100ms++;
+	}
+
+	if (stVarTimer.u8TimerCount100ms >= (uint8_t)10)
+	{
+		stVarTimer.u8TimerCount100ms = RESET;
+		stVarTimer.u8TimeFlag_1sec   = SET;
+	    stVarTimer.u32TimerCount1sec++;
+	}
+
+	}
+}
+
+/**
+  * @brief This function handles USART3 global interrupt.
+  */
+void USART3_IRQHandler(void)
+{
+/* Check RXNE flag value in ISR register */
+if(LL_USART_IsActiveFlag_RXNE(hdefCOM_PORT) &&
+   LL_USART_IsEnabledIT_RXNE (hdefCOM_PORT))
+	{
+		uint8_t u8TemChar;
+		/* Read one byte from the receive data register */
+		u8TemChar = LL_USART_ReceiveData8(hdefCOM_PORT);
+
+		if (stVarUSART.u8UsartRxDataCount < hdefCOM_MAX_BUFFER)
+		{
+			stVarUSART.u8UsartRxBuffer [stVarUSART.u8UsartRxDataCount++] = u8TemChar;
+			stVarUSART.u8UsartRxBuffer [stVarUSART.u8UsartRxDataCount]   = NULL;
+		}
+
+		/***************** FRAME TERMINATION CHECKING **************************/
+		stVarUSART.u8UsartRxIntFlag = SET ;
+		if (stVarUSART.u8UsartRxIntStartFlag != SET )
+			stVarUSART.u8UsartRxIntStartFlag  = SET ;
+	}
+}
+
+
+
+

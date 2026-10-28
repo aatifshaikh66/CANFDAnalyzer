@@ -1,0 +1,261 @@
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/*------------------------------------------------------------------------------
+ *  Includes
+ * ---------------------------------------------------------------------------*/
+
+	#include "main.h"
+	#include "gpio.h"
+	#include "fdcan.h"
+	#include "usart.h"
+	#include "tim.h"
+
+/*------------------------------------------------------------------------------
+ *  Hash definitions
+ * ---------------------------------------------------------------------------*/
+/* DUAL_CORE_BOOT_SYNC_SEQUENCE: Define for dual core boot synchronization    */
+/*                             demonstration code based on hardware semaphore */
+/* This define is present in both CM7/CM4 projects                            */
+/* To comment when developping/debugging on a single core                     */
+	#define DUAL_CORE_BOOT_SYNC_SEQUENCE
+
+	#if defined(DUAL_CORE_BOOT_SYNC_SEQUENCE)
+	#ifndef LL_HSEM_ID_0
+	#define LL_HSEM_ID_0 (0U) /* HW semaphore 0*/
+	#endif
+	#endif /* DUAL_CORE_BOOT_SYNC_SEQUENCE */
+
+	/* Private macro -------------------------------------------------------------*/
+	/* USER CODE BEGIN PM */
+	/* USER CODE BEGIN PD */
+	#ifndef HSEM_ID_0
+	#define HSEM_ID_0 (0U)
+	#endif
+
+/*------------------------------------------------------------------------------
+ * function declaration
+ * ---------------------------------------------------------------------------*/
+
+	void SystemClock_Config(void);
+
+/*------------------------------------------------------------------------------
+ *  start of the code
+ * ---------------------------------------------------------------------------*/
+int main(void)
+{
+
+/**********************************************************/
+//setting up the dual boot sequence.
+/**********************************************************/
+#if defined(DUAL_CORE_BOOT_SYNC_SEQUENCE)
+	  int32_t timeout;
+#endif /* DUAL_CORE_BOOT_SYNC_SEQUENCE */
+
+#if defined(DUAL_CORE_BOOT_SYNC_SEQUENCE)
+	  /* Wait until CPU2 boots and enters in stop mode or timeout*/
+	  timeout = 0xFFFF;
+	  while((__HAL_RCC_GET_FLAG(RCC_FLAG_D2CKRDY) != RESET) && (timeout-- > 0));
+	  if ( timeout < 0 )
+	  {
+		  Error_Handler();
+	  }
+#endif /* DUAL_CORE_BOOT_SYNC_SEQUENCE */
+  /* MCU Configuration--------------------------------------------------------*/
+
+/**********************************************************/
+//MCU Configuration.
+/**********************************************************/
+	  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	  HAL_Init();
+
+	  //set the system clock
+	  SystemClock_Config( );
+
+/**********************************************************/
+//release Cortex-M4.
+/**********************************************************/
+#if defined(DUAL_CORE_BOOT_SYNC_SEQUENCE)
+	/* When system initialization is finished, Cortex-M7 will release Cortex-M4 by means of
+	HSEM notification */
+	/*HW semaphore Clock enable*/
+	LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_HSEM);
+	/*Take HSEM */
+	LL_HSEM_1StepLock(HSEM, LL_HSEM_ID_0);
+	/*Release HSEM in order to notify the CPU2(CM4)*/
+	LL_HSEM_ReleaseLock(HSEM, LL_HSEM_ID_0, 0);
+	/* wait until CPU2 wakes up from stop mode */
+	timeout = 0xFFFF;
+	while((LL_RCC_D2CK_IsReady() == 0) && ((timeout--) > 0));
+	if ( timeout < 0 )
+	{
+	Error_Handler();
+	}
+#endif /* DUAL_CORE_BOOT_SYNC_SEQUENCE */
+
+/**********************************************************/
+//Peripheral initialization.
+/**********************************************************/
+
+	MX_GPIO_Init( );
+
+	MX_USART3_UART_Init( );
+	printf("COM Port Init \r\n");
+
+	MX_TIM3_Init( );
+	printf("Timer 1ms Init \r\n");
+
+	Configure_IWDG ( );
+	printf("Watchdog 4s Init \r\n");
+
+	FnHALCANFD_Init();
+	printf("CANFD Init \r\n");
+
+	uint32_t Identifier = 0x011 ;
+	uint8_t ui8Data[FDCAN_DLC_BYTES_8] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
+	FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data);
+	FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data);
+	FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data);
+	FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data);
+	FnHALCANFD_SendData(Identifier,FDCAN_DLC_BYTES_8,ui8Data);
+
+
+/**********************************************************/
+//Infinite loop
+/**********************************************************/
+  while (1)
+  {
+	  FnTimeProcessEvents( );
+  }
+
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	SystemClock_Config
+ **@Descriptions		:	CubeMX generated (LL). Configures the power supply and the clock tree
+ **						of the Cortex-M7 and has to be called once, right after HAL_Init and
+ **						before the dual core boot synchronization (Boot_Mode_Sequence_2).
+ **						Steps:
+ **						- flash latency 3 wait states
+ **						- supply: direct SMPS (matches the NUCLEO-H755ZI-Q hardware),
+ **						  voltage scale 2
+ **						- HSI on, 64 MHz (divider 1), used as the PLL1 source
+ **						- PLL1: input 64 MHz / M=4 = 16 MHz, VCO = 16 MHz x N=25 = 400 MHz
+ **						  P=2 -> 200 MHz (system clock), Q=8 -> 50 MHz (FDCAN kernel clock),
+ **						  R=2 -> 200 MHz
+ **						- AHB prescaler 2 while switching, then 1: system clock and HCLK
+ **						  = 200 MHz
+ **						- APB1 /4 = 50 MHz (timer clock 100 MHz), APB2 /2, APB3 /2 and
+ **						  APB4 /2 = 100 MHz
+ **						- SystemCoreClock set to 200 MHz and the HAL tick re-initialized
+ **						  for the new clock
+ **						The supply setting can only be written once after a power on reset,
+ **						and a wrong setting can lock the board.
+ **@parameters			:	None
+ **@return				: 	None (goes to Error_Handler if the tick cannot be started)
+*****************************************************************************/
+void SystemClock_Config(void)
+{
+  LL_FLASH_SetLatency(LL_FLASH_LATENCY_3);
+  while(LL_FLASH_GetLatency()!= LL_FLASH_LATENCY_3)
+  {
+  }
+  LL_PWR_ConfigSupply(LL_PWR_DIRECT_SMPS_SUPPLY);
+  LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE2);
+  while (LL_PWR_IsActiveFlag_VOS() == 0)
+  {
+  }
+  LL_RCC_HSI_Enable();
+
+   /* Wait till HSI is ready */
+  while(LL_RCC_HSI_IsReady() != 1)
+  {
+
+  }
+  LL_RCC_HSI_SetCalibTrimming(64);
+  LL_RCC_HSI_SetDivider(LL_RCC_HSI_DIV1);
+  LL_RCC_PLL_SetSource(LL_RCC_PLLSOURCE_HSI);
+  LL_RCC_PLL1P_Enable();
+  LL_RCC_PLL1Q_Enable();
+  LL_RCC_PLL1_SetVCOInputRange(LL_RCC_PLLINPUTRANGE_8_16);
+  LL_RCC_PLL1_SetVCOOutputRange(LL_RCC_PLLVCORANGE_WIDE);
+  LL_RCC_PLL1_SetM(4);
+  LL_RCC_PLL1_SetN(25);
+  LL_RCC_PLL1_SetP(2);
+  LL_RCC_PLL1_SetQ(8);
+  LL_RCC_PLL1_SetR(2);
+  LL_RCC_PLL1_Enable();
+
+   /* Wait till PLL is ready */
+  while(LL_RCC_PLL1_IsReady() != 1)
+  {
+  }
+
+   /* Intermediate AHB prescaler 2 when target frequency clock is higher than 80 MHz */
+   LL_RCC_SetAHBPrescaler(LL_RCC_AHB_DIV_2);
+
+  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL1);
+
+   /* Wait till System clock is ready */
+  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL1)
+  {
+
+  }
+  LL_RCC_SetSysPrescaler(LL_RCC_SYSCLK_DIV_1);
+  LL_RCC_SetAHBPrescaler(LL_RCC_AHB_DIV_1);
+  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_4);
+  LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_2);
+  LL_RCC_SetAPB3Prescaler(LL_RCC_APB3_DIV_2);
+  LL_RCC_SetAPB4Prescaler(LL_RCC_APB4_DIV_2);
+  LL_SetSystemCoreClock(200000000);
+
+   /* Update the time base */
+  if (HAL_InitTick (TICK_INT_PRIORITY) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+#ifdef USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */

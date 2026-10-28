@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="java.lang.Class">
+		<item key="replaceBarOpen" value="true"/>
+		<item key="selection" value="FnHALCANFD_Init();"/>
+		<list key="findhistory">
+			<item value="TIM2"/>
+			<item value="LL_RCC_LSI_Enable"/>
+			<item value="FnHALCANFD_StandardDataLength"/>
+			<item value="&apos;1&apos;"/>
+			<item value="hfdcan1"/>
+			<item value="u8CANDataLen "/>
+			<item value="TimestampCounter"/>
+			<item value="buff"/>
+			<item value="TxHeader"/>
+			<item value="stFDCANTxHeader"/>
+			<item value="RxHeader"/>
+			<item value="ucGPSMessageCnt"/>
+			<item value="tim3"/>
+			<item value="COM_PORT"/>
+			<item value="hdefCOM_PORT"/>
+		</list>
+		<list key="replacehistory">
+			<item value="1"/>
+			<item value="stFDCANTxHeader"/>
+		</list>
+	</section>
+</section>

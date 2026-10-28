@@ -1,0 +1,107 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file    fdcan.h
+  * @brief   This file contains all the function prototypes for
+  *          the fdcan.c file
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __FDCAN_H__
+#define __FDCAN_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+
+/* USER CODE BEGIN Includes */
+	/*to conver the data*/
+	typedef union
+	{
+	  int8_t    s8[(uint8_t)8];
+	  uint8_t   u8[(uint8_t)8];
+	  int16_t  s16[(uint8_t)4];
+	  uint16_t u16[(uint8_t)4];
+	  int32_t  s32[(uint8_t)2];
+	  uint32_t u32[(uint8_t)2];
+	  float	   f32[(uint8_t)2];
+	  double   d64;
+	  int64_t  s64;
+	  uint64_t u64;
+	}unConvo8;
+
+	/*to conver the data*/
+	typedef union
+	{
+	  int8_t    s8[(uint8_t)4];
+	  uint8_t   u8[(uint8_t)4];
+	  int16_t  s16[(uint8_t)2];
+	  uint16_t u16[(uint8_t)2];
+	  int32_t  s32;
+	  uint32_t u32;
+	  float	   f32;
+	}unConvo4;
+
+
+	/*defined a controlled structure*/
+	typedef struct
+	{
+		/*This flag is to indicate that there is a message in RX buffer*/
+		uint8_t ui8CANRxFameFlag;
+		/*This counter is to indicate that how many messages are there in RX buffer*/
+		uint8_t ui8CANRxFameCount;
+		/*This counter is to indicate that how many messages are lost*/
+		uint16_t ui8CANRxFameLost;
+
+		/*will be used to convert the CAN ID*/
+		unConvo4 unCANID;
+		/*the converted ID will be stored in*/
+		char	 scCANID[(uint8_t)16];
+		uint8_t  u8CANDataLen;
+		uint8_t	 u8CANData[(uint8_t)64];
+
+
+	}stCANFD;
+/* USER CODE END Includes */
+
+extern FDCAN_HandleTypeDef hfdcan1;
+
+/* USER CODE BEGIN Private defines */
+
+	extern uint8_t rx_flag;
+	extern uint8_t rx_data[64];
+	extern FDCAN_RxHeaderTypeDef RxHeader;
+
+/* USER CODE END Private defines */
+
+void MX_FDCAN1_Init(void);
+
+/* USER CODE BEGIN Prototypes */
+
+	void FnHALCANFD_Init(void);
+	HAL_StatusTypeDef FnHALCANFD_SendData(uint32_t Identifier, uint8_t DataLength, uint8_t *ui8Data);
+	void FnHALCANFD_ReceiveData(void);
+
+
+/* USER CODE END Prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __FDCAN_H__ */
+

@@ -1,0 +1,81 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file    tim.h
+  * @brief   This file contains all the function prototypes for
+  *          the tim.c file
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __TIM_H__
+#define __TIM_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*------------------------------------------------------------------------------
+ *  Includes
+ * ---------------------------------------------------------------------------*/
+	#include "main.h"
+
+/*------------------------------------------------------------------------------
+ *  Hash definition
+ * ---------------------------------------------------------------------------*/
+	#define hdefIWDG_RESET 	LL_IWDG_ReloadCounter(IWDG1);
+
+/*------------------------------------------------------------------------------
+ *  Strcture definitions
+ * ---------------------------------------------------------------------------*/
+
+	/*********timer structure **********/
+	typedef struct
+	{
+
+	 uint8_t  u8TimeFlag_10msec;  // This flag is used to perfrom the task with the frequncy of 10 ms
+	 uint8_t  u8TimeFlag_100msec; // This flag is used to perfrom the task with the frequncy of 100 ms
+	 uint8_t  u8TimeFlag_1sec;    // This flag is used to perfrom the task with the frequncy of 1 sec
+	 uint8_t  u8TimeFlag_1min;	  // This flag is used to perfrom the task with the frequncy of 1 min
+
+	 uint32_t uiVar1ms_Counter;	  // Counter used to Count the 1 ms
+	 uint32_t uiVar10ms_Counter;  // Counter used to Count the 10 ms
+	 uint32_t uiVar100ms_Counter; // Counter used to Count the 100 ms
+	 uint32_t uiVar1sec_counter;  // Counter used to Count the 1 s
+	 uint32_t uiVar1min_counter;  // Counter used to Count the 1 m
+	 uint32_t uiVar1hour_counter; // Counter used to Count the 1 h
+
+	 uint8_t  uiVar1day_counter			;
+	 uint8_t  uiVar1month_counter		;
+	 uint8_t  uiVar1year_counter		;
+
+	 uint64_t	uiVar1SecUniversalCNT	;
+
+	 char 		ucLocalDateNTime[_DNumber_20];
+
+	}stTimerCounter_ALL;
+
+
+/*------------------------------------------------------------------------------
+ * function global declaration
+ * ---------------------------------------------------------------------------*/
+	void MX_TIM3_Init(void);
+	void Configure_IWDG(void);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __TIM_H__ */
+

@@ -1,0 +1,618 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file    fdcan.c
+  * @brief   This file provides code for the configuration
+  *          of the FDCAN instances.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
+/*------------------------------------------------------------------------------
+ *  Includes
+ * ---------------------------------------------------------------------------*/
+	#include "fdcan.h"
+	#include "gpio.h"
+	#include "tim.h"
+
+/*------------------------------------------------------------------------------
+ *  Global variable
+ * ---------------------------------------------------------------------------*/
+	FDCAN_HandleTypeDef   hfdcan1;
+	FDCAN_TxHeaderTypeDef stFDCANTxHeader;
+	FDCAN_RxHeaderTypeDef stFDCANRxHeader;
+	stCANFD stVarCANFD;
+
+/*------------------------------------------------------------------------------
+ *  Function declaration
+ * ---------------------------------------------------------------------------*/
+	void FnHALCANFD_TXConfig(void);
+	void FnFDCANFrameError(void);
+	void FnFDCANFrameProcess(stCANFD *stVarCANFD);
+
+
+/*****************************************************************************
+ **@Function 		  	: 	MX_FDCAN1_Init
+ **@Descriptions		:	CubeMX generated. Fills the hfdcan1 handle and calls HAL_FDCAN_Init.
+ **						Settings: CAN FD with bit rate switch, internal loopback mode,
+ **						auto retransmission on, nominal bit timing 250 kbit/s (prescaler 5,
+ **						Seg1 34, Seg2 5, SJW 5), data bit timing 500 kbit/s (prescaler 4,
+ **						Seg1 22, Seg2 2, SJW 2) for a 50 MHz kernel clock. Message RAM:
+ **						Rx FIFO0 with 64 elements of 64 bytes, Tx FIFO queue with 30
+ **						elements of 64 bytes, no filters, no Rx FIFO1, no Rx buffers,
+ **						no Tx buffers, no Tx events.
+ **						HAL_FDCAN_Init calls HAL_FDCAN_MspInit by itself, so there is no
+ **						need to call it. It does not start the peripheral.
+ **@parameters			:	None
+ **@return				: 	None (goes to Error_Handler if HAL_FDCAN_Init fails)
+*****************************************************************************/
+void MX_FDCAN1_Init(void)
+{
+
+  /*FDCAN1 peripheral instance that this handle controls*/
+  hfdcan1.Instance = FDCAN1;
+
+	/*frame format: CAN FD frames with bit rate switching allowed (the data phase can
+	run at the data bit rate when the BRS bit of the frame is set). Classic CAN frames
+	are still received, they just have no data phase switch. FDCAN_FRAME_CLASSIC would
+	accept only 8-byte CAN 2.0 frames*/
+  hfdcan1.Init.FrameFormat = FDCAN_FRAME_FD_BRS;
+
+  /*operating mode of the FDCAN. The mode is chosen at init time, so the simplest way to
+    change it is a compile-time switch. Overview:
+
+    FDCAN_MODE_NORMAL
+      - Full participation on the bus: receives, sends, acknowledges every frame it
+        received correctly (the ACK does not depend on the filters) and sends active error
+        flags when it detects an error.
+      - Needs a transceiver and at least one other node (an ACK is required for a
+        successful transmission).
+      - Use: the real application, for example the analyzer sending commands as a second
+        master, and when the analyzer is the only other node that ACKs the SAMV71.
+
+    FDCAN_MODE_RESTRICTED_OPERATION
+      - Receives data frames and acknowledges valid frames, but never sends data frames,
+        remote frames, active error flags or overload flags. After an error it stays silent
+        and waits until the bus is idle again.
+      - Cannot transmit. The hardware can also enter this mode by itself after a message
+        RAM access failure.
+      - Use: a receive-only node that must still give the ACK, for example a sniffer on a
+        bus where it is the only other node, so the transmitter does not see ACK errors.
+
+    FDCAN_MODE_BUS_MONITORING
+      - Receives valid frames but only sends recessive bits: no ACK, no error flags, no
+        transmission. Dominant bits that the node would send are looped back internally,
+        so the node never disturbs the bus.
+      - Frames queued for transmission are not sent.
+      - Because it does not ACK, at least one other node on the bus must ACK the frames.
+      - Use: a completely passive analyzer on a bus that already has other receivers, and
+        a safe first connection to an unknown bus (wrong bit timing cannot disturb it).
+
+    FDCAN_MODE_INTERNAL_LOOPBACK
+      - The transmitter is connected to the receiver inside the chip. The CAN_RX pin is
+        ignored and CAN_TX stays recessive, so nothing appears on the bus. Frames can be
+        sent without a transceiver, a bus or another node, acknowledge errors are ignored,
+        and every frame sent is received by this node.
+      - Use: developing and testing the driver and the parser without hardware (the
+        current setting).
+
+    FDCAN_MODE_EXTERNAL_LOOPBACK
+      - The same internal feedback as above (the CAN_RX pin is ignored, acknowledge errors
+        are ignored), but the CAN_TX pin is driven, so the frames can be seen at the pin and
+        are sent onto the bus if a transceiver is connected.
+      - Use: testing the pin, the transceiver output and the bit timing with a scope or logic
+        analyzer without a second node. Do not use it on a live bus, because the frames
+        really are transmitted.
+
+    Modes that can transmit: NORMAL, INTERNAL_LOOPBACK (internally only) and
+    EXTERNAL_LOOPBACK. Modes that cannot: RESTRICTED_OPERATION and BUS_MONITORING.
+    Suggested order for this project: INTERNAL_LOOPBACK (now) -> EXTERNAL_LOOPBACK
+    (pins and transceiver, no live bus) -> BUS_MONITORING (first connection to the SAMV71)
+    -> NORMAL (analyzer plus command sending)*/
+  hfdcan1.Init.Mode = FDCAN_MODE_INTERNAL_LOOPBACK;
+
+  /*automatic retransmission: a frame that lost arbitration or was hit by an error is
+    sent again by the hardware until it succeeds*/
+  hfdcan1.Init.AutoRetransmission = ENABLE;
+
+  /*transmit pause: disabled, the node does not insert an extra pause of 2 bit times
+    after its own successful transmission*/
+  hfdcan1.Init.TransmitPause = DISABLE;
+
+  /*protocol exception handling: enabled. A frame with the reserved bit received
+    recessive (a possible future protocol) makes the node wait until the bus is idle
+    instead of counting it as an error*/
+  hfdcan1.Init.ProtocolException = ENABLE;
+
+  /*----- NOMINAL bit timing: arbitration phase and control fields, 250 kbit/s -----
+    tq = prescaler / kernel clock = 5 / 50 MHz = 100 ns
+    bit time = (1 sync + Seg1 + Seg2) x tq = (1 + 34 + 5) x 100 ns = 4 us = 250 kbit/s
+    sample point = (1 + Seg1) / (1 + Seg1 + Seg2) = 35 / 40 = 87.5 %*/
+  hfdcan1.Init.NominalPrescaler = 5;       /*divider of the kernel clock (1 to 512)*/
+  hfdcan1.Init.NominalSyncJumpWidth = 5;   /*maximum resynchronization step in tq, keep <= Seg2*/
+  hfdcan1.Init.NominalTimeSeg1 = 34;       /*tq before the sample point (propagation + phase 1)*/
+  hfdcan1.Init.NominalTimeSeg2 = 5;        /*tq after the sample point (phase 2)*/
+
+  /*----- DATA bit timing: data phase of frames with BRS, 500 kbit/s -----
+    tq = 4 / 50 MHz = 80 ns
+    bit time = (1 + 22 + 2) x 80 ns = 2 us = 500 kbit/s
+    sample point = (1 + 22) / 25 = 92 %
+    limits of the data fields: prescaler 1-32, Seg1 1-31, Seg2 1-16, SJW 1-16*/
+  hfdcan1.Init.DataPrescaler = 4;
+  hfdcan1.Init.DataSyncJumpWidth = 2;      /*keep <= Seg2*/
+  hfdcan1.Init.DataTimeSeg1 = 22;
+  hfdcan1.Init.DataTimeSeg2 = 2;
+
+  /*----- message RAM layout (shared by all FDCAN instances, sizes in 32-bit words) -----
+    start of this instance's area inside the message RAM, in words. 0 for the first
+    instance, a second FDCAN instance must start behind the end of this one*/
+  hfdcan1.Init.MessageRAMOffset = 0;
+
+  /*number of filter elements in the message RAM. 0 = no individual filters, what
+    happens to a frame is decided only by the global filter, which is set in
+    FnHALCANFD_Init (accept everything into Rx FIFO0)*/
+  hfdcan1.Init.StdFiltersNbr = 0;          /*11-bit identifier filters*/
+  hfdcan1.Init.ExtFiltersNbr = 0;          /*29-bit identifier filters*/
+
+  /*Rx FIFO0: the main receive queue. 64 elements, each holds up to 64 data bytes
+    (2 header words + 16 data words = 18 words), so 64 x 18 = 1152 words.
+    If it is full the next frame is lost (message lost interrupt/flag)*/
+  hfdcan1.Init.RxFifo0ElmtsNbr = 64;
+  hfdcan1.Init.RxFifo0ElmtSize = FDCAN_DATA_BYTES_64;
+
+  /*Rx FIFO1: not used, no elements; the size is irrelevant and set to the minimum*/
+  hfdcan1.Init.RxFifo1ElmtsNbr = 0;
+  hfdcan1.Init.RxFifo1ElmtSize = FDCAN_DATA_BYTES_8;
+
+  /*dedicated Rx buffers (for individual identifiers selected by a filter): not
+    used, no elements; the size is irrelevant*/
+  hfdcan1.Init.RxBuffersNbr = 0;
+  hfdcan1.Init.RxBufferSize = FDCAN_DATA_BYTES_8;
+
+  /*Tx event FIFO: no elements, no log of transmitted frames. Matches
+    TxEventFifoControl = FDCAN_NO_TX_EVENTS in FnHALCANFD_TXConfig*/
+  hfdcan1.Init.TxEventsNbr = 0;
+
+  /*dedicated Tx buffers: none. As a consequence HAL_FDCAN_AddMessageToTxBuffer and
+    HAL_FDCAN_EnableTxBufferRequest cannot be used, frames are queued with
+    HAL_FDCAN_AddMessageToTxFifoQ*/
+  hfdcan1.Init.TxBuffersNbr = 0;
+
+  /*Tx FIFO/queue: 30 frames can wait for transmission (together with the dedicated
+    buffers at most 32). FIFO operation sends the frames in the order they were
+    added; FDCAN_TX_QUEUE_OPERATION would send the lowest identifier first*/
+  hfdcan1.Init.TxFifoQueueElmtsNbr = 30;
+  hfdcan1.Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
+
+  /*data bytes per Tx element (applies to all Tx elements): 64 bytes, 18 words each,
+    30 x 18 = 540 words*/
+  hfdcan1.Init.TxElmtSize = FDCAN_DATA_BYTES_64;
+
+  /*timestamp counter: one tick = 16 nominal bit times (prescaler 16), internal counter*/
+  HAL_FDCAN_ConfigTimestampCounter(&hfdcan1, FDCAN_TIMESTAMP_PRESC_16);
+  HAL_FDCAN_EnableTimestampCounter(&hfdcan1, FDCAN_TIMESTAMP_INTERNAL);
+
+
+  /*write the configuration to the peripheral. On the first call HAL_FDCAN_Init
+    calls HAL_FDCAN_MspInit (kernel clock, peripheral clock, pins, NVIC), enters the
+    init mode, sets the bit timing and the message RAM layout. It fails if the
+    parameters are invalid or the kernel clock is missing. It does not start the
+    node: HAL_FDCAN_Start has to be called afterwards*/
+  if (HAL_FDCAN_Init(&hfdcan1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	HAL_FDCAN_MspInit
+ **@Descriptions		:	CubeMX generated, called by HAL_FDCAN_Init. Low level setup of FDCAN1:
+ **						selects PLL1Q as the FDCAN kernel clock, enables the FDCAN clock and
+ **						the GPIOA clock, configures PA11 (RX) and PA12 (TX) as alternate
+ **						function AF9 without pull, and enables the FDCAN1 interrupt line 0
+ **						in the NVIC with priority 0.
+ **@parameters			:	fdcanHandle	: handle of the FDCAN being initialized
+ **@return				: 	None
+*****************************************************************************/
+void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef* fdcanHandle)
+{
+
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  if(fdcanHandle->Instance==FDCAN1)
+  {
+  /* USER CODE BEGIN FDCAN1_MspInit 0 */
+
+  /* USER CODE END FDCAN1_MspInit 0 */
+    LL_RCC_SetFDCANClockSource(LL_RCC_FDCAN_CLKSOURCE_PLL1Q);
+
+    /* FDCAN1 clock enable */
+    __HAL_RCC_FDCAN_CLK_ENABLE();
+
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    /**FDCAN1 GPIO Configuration
+    PA11     ------> FDCAN1_RX
+    PA12     ------> FDCAN1_TX
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_11|GPIO_PIN_12;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+    GPIO_InitStruct.Alternate = GPIO_AF9_FDCAN1;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    /* FDCAN1 interrupt Init */
+    HAL_NVIC_SetPriority(FDCAN1_IT0_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(FDCAN1_IT0_IRQn);
+  /* USER CODE BEGIN FDCAN1_MspInit 1 */
+
+  /* USER CODE END FDCAN1_MspInit 1 */
+  }
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	HAL_FDCAN_MspDeInit
+ **@Descriptions		:	CubeMX generated, called by HAL_FDCAN_DeInit. Undoes the work of
+ **						HAL_FDCAN_MspInit: disables the FDCAN clock, releases PA11 and PA12
+ **						and disables the FDCAN1 interrupt line 0.
+ **@parameters			:	fdcanHandle	: handle of the FDCAN being de-initialized
+ **@return				: 	None
+*****************************************************************************/
+void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef* fdcanHandle)
+{
+
+  if(fdcanHandle->Instance==FDCAN1)
+  {
+  /* USER CODE BEGIN FDCAN1_MspDeInit 0 */
+
+  /* USER CODE END FDCAN1_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_FDCAN_CLK_DISABLE();
+
+    /**FDCAN1 GPIO Configuration
+    PA11     ------> FDCAN1_RX
+    PA12     ------> FDCAN1_TX
+    */
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_11|GPIO_PIN_12);
+
+    /* FDCAN1 interrupt Deinit */
+    HAL_NVIC_DisableIRQ(FDCAN1_IT0_IRQn);
+  /* USER CODE BEGIN FDCAN1_MspDeInit 1 */
+
+  /* USER CODE END FDCAN1_MspDeInit 1 */
+  }
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	FnHALCANFD_Init
+ **@Descriptions		:	Initializes FDCAN1 and starts it. It calls MX_FDCAN1_Init (bit timing,
+ **						message RAM layout and, through HAL_FDCAN_MspInit, the clock source, GPIO
+ **						pins and NVIC), loads the default Tx frame parameters, sets the global
+ **						filter so that every standard and extended frame goes into Rx FIFO0,
+ **						enables the "new message in Rx FIFO0" interrupt and starts the peripheral.
+ **						Has to be called once, after the system clock is configured.
+ **@parameters			:	None
+ **@return				: 	None
+*****************************************************************************/
+void FnHALCANFD_Init(void)
+{
+	/*init the FDCAN peripheral: bit timing, message RAM layout and, through
+	  HAL_FDCAN_MspInit, the clock source, the GPIO pins and the NVIC*/
+	MX_FDCAN1_Init( );
+
+	/*set the default TX frame parameters (extended ID, FD format, BRS on)*/
+	FnHALCANFD_TXConfig( );
+
+	/*global filter, since no individual filters are configured (analyzer mode):
+	  - standard ID frames that match no filter -> accept into Rx FIFO0
+	  - extended ID frames that match no filter -> accept into Rx FIFO0
+	  - remote frames are filtered like data frames, so they also end up
+	    in Rx FIFO0 (FDCAN_REJECT_REMOTE would drop them)
+	  has to be called before HAL_FDCAN_Start*/
+	HAL_FDCAN_ConfigGlobalFilter(&hfdcan1,
+	        FDCAN_ACCEPT_IN_RX_FIFO0, FDCAN_ACCEPT_IN_RX_FIFO0,
+	        FDCAN_FILTER_REMOTE, FDCAN_FILTER_REMOTE);
+
+	/*enable the interrupt for a new message in Rx FIFO0;
+	  HAL_FDCAN_RxFifo0Callback is then called from the IRQ handler.
+	  The last parameter is unused for the Rx FIFO notifications*/
+	HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+
+	/*leave the init mode and join the bus (internal loopback for now);
+	  from here on frames can be sent and received*/
+	HAL_FDCAN_Start(&hfdcan1);
+
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	FnHALCANFD_TXConfig
+ **@Descriptions		:	Sets the default parameters of the global stFDCANTxHeader: extended ID, data
+ **						frame, ESI active, CAN FD format with bit rate switch, no Tx events.
+ **						The Identifier and the DataLength are set per frame in
+ **						FnHALCANFD_SendData.
+ **@parameters			:	None
+ **@return				: 	None
+*****************************************************************************/
+void FnHALCANFD_TXConfig(void)
+{
+	/*29-bit extended identifier (the SAMV71 uses extended IDs)*/
+	stFDCANTxHeader.IdType              = FDCAN_EXTENDED_ID;
+
+	/*data frame; CAN FD has no remote frames*/
+	stFDCANTxHeader.TxFrameType         = FDCAN_DATA_FRAME;
+
+	/*ESI bit follows the node's real error state: dominant while error active,
+	  the hardware sets it recessive by itself if the node becomes error passive
+	  (FDCAN_ESI_PASSIVE would force it recessive)*/
+	stFDCANTxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
+
+	/*switch to the data bit rate (500 kbit/s) for the data phase;
+	  only effective because the frame format in the init is FDCAN_FRAME_FD_BRS*/
+	stFDCANTxHeader.BitRateSwitch       = FDCAN_BRS_ON;
+
+	/*send as a CAN FD frame (up to 64 bytes) and not as a classic CAN frame*/
+	stFDCANTxHeader.FDFormat            = FDCAN_FD_CAN;
+
+	/*do not store a Tx event after sending (TxEventsNbr is 0 in the init)*/
+	stFDCANTxHeader.TxEventFifoControl  = FDCAN_NO_TX_EVENTS;
+
+	/*marker copied into the Tx event; unused while Tx events are off*/
+	stFDCANTxHeader.MessageMarker       = (uint8_t)0x00;
+
+	/*Identifier and DataLength are set per frame in FnHALCANFD_SendData*/
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	FnCANFdSetSTDDataLength
+ **@Descriptions		:	Converts a number of data bytes into the DLC code of the next valid
+ **						CAN FD frame length (0-8, 12, 16, 20, 24, 32, 48, 64 bytes). A length
+ **						that is not valid is rounded up, for example 10 bytes -> 12 bytes.
+ **						Values above 64 are limited to 64 bytes.
+ **@parameters			:	DataLength	: number of data bytes (0..64)
+ **@return				: 	DLC code (FDCAN_DLC_BYTES_x) to be used in stFDCANTxHeader.DataLength
+*****************************************************************************/
+uint32_t FnCANFdSetSTDDataLength(uint8_t DataLength)
+{
+	if (DataLength < (uint8_t)9)
+		return DataLength;
+	else if (DataLength > (uint8_t)8  && DataLength < (uint8_t)13 )
+		 return FDCAN_DLC_BYTES_12;
+	else if (DataLength > (uint8_t)12 && DataLength < (uint8_t)17 )
+		 return FDCAN_DLC_BYTES_16;
+	else if (DataLength > (uint8_t)16 && DataLength < (uint8_t)21 )
+		 return FDCAN_DLC_BYTES_20;
+	else if (DataLength > (uint8_t)20 && DataLength < (uint8_t)25 )
+		 return FDCAN_DLC_BYTES_24;
+	else if (DataLength > (uint8_t)24 && DataLength < (uint8_t)33 )
+		 return FDCAN_DLC_BYTES_32;
+	else if (DataLength > (uint8_t)32 && DataLength < (uint8_t)49 )
+		 return FDCAN_DLC_BYTES_48;
+	else return FDCAN_DLC_BYTES_64;
+}
+
+/*****************************************************************************
+ **@Function 		  	:
+ **@Descriptions		:
+ **@parameters			: 	None
+ **@return				: 	None
+*****************************************************************************/
+uint32_t FnCANFdReadSTDDataLength(uint8_t DataLength)
+{
+	switch(DataLength)
+	{
+		case FDCAN_DLC_BYTES_0: return FDCAN_DLC_BYTES_0;
+		case FDCAN_DLC_BYTES_1: return FDCAN_DLC_BYTES_1;
+		case FDCAN_DLC_BYTES_2: return FDCAN_DLC_BYTES_2;
+		case FDCAN_DLC_BYTES_3: return FDCAN_DLC_BYTES_3;
+		case FDCAN_DLC_BYTES_4: return FDCAN_DLC_BYTES_4;
+		case FDCAN_DLC_BYTES_5: return FDCAN_DLC_BYTES_5;
+		case FDCAN_DLC_BYTES_6: return FDCAN_DLC_BYTES_6;
+		case FDCAN_DLC_BYTES_7: return FDCAN_DLC_BYTES_7;
+		case FDCAN_DLC_BYTES_8: return FDCAN_DLC_BYTES_8;
+		case FDCAN_DLC_BYTES_12: return (uint8_t)12;
+		case FDCAN_DLC_BYTES_16: return (uint8_t)16;
+		case FDCAN_DLC_BYTES_20: return (uint8_t)20;
+		case FDCAN_DLC_BYTES_24: return (uint8_t)24;
+		case FDCAN_DLC_BYTES_32: return (uint8_t)32;
+		case FDCAN_DLC_BYTES_48: return (uint8_t)48;
+		case FDCAN_DLC_BYTES_64: return (uint8_t)64;
+		default: return (uint8_t)64;
+	}
+
+	 return (uint8_t)64;
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	FnHALCANFD_SendData
+ **@Descriptions		:	Queues one CAN FD frame in the Tx FIFO of FDCAN1. The frame uses the
+ **						default parameters of FnHALCANFD_TXConfig. The length is rounded up to
+ **						the next valid CAN FD length and the extra bytes are padded with 0.
+ **						The function does not wait: if the Tx FIFO is full the frame is not
+ **						queued. It uses the global stFDCANTxHeader, so it must not be called from the
+ **						main loop and from an interrupt at the same time.
+ **@parameters			:	Identifier	: 29-bit extended identifier of the frame
+ **						DataLength	: number of data bytes (0..64, larger values are cut to 64)
+ **						ui8Data		: pointer to the data (at least DataLength bytes)
+ **@return				: 	HAL_OK		: frame queued, the FDCAN sends it when the bus is free
+ **						HAL_BUSY	: Tx FIFO is full, frame not queued
+ **						HAL_ERROR	: the HAL rejected the frame (for example FDCAN not started)
+*****************************************************************************/
+HAL_StatusTypeDef FnHALCANFD_SendData(uint32_t Identifier, uint8_t DataLength, uint8_t *ui8Data)
+{
+
+	/*local frame buffer, sized for the largest frame; the bytes after the
+	  original data stay 0 and become the padding*/
+	uint8_t u8DataAndPadd[defCANFD_MAX_LD] = {RESET};
+
+	/*truncate the data length if it is more than 64 bytes, so the copy below
+	  can never overflow the local buffer*/
+	if (DataLength > defCANFD_MAX_LD) DataLength = defCANFD_MAX_LD;
+
+	/*check that the Tx FIFO has a free element before changing anything;
+	  the caller can retry later when the FIFO has drained*/
+	if (HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan1) == RESET)
+		return HAL_BUSY;
+
+	/*set the identifier of this frame*/
+	stFDCANTxHeader.Identifier = Identifier;
+
+	/*convert the byte count into the DLC code of the next valid CAN FD length
+	  (for example 10 bytes -> DLC for 12 bytes)*/
+	stFDCANTxHeader.DataLength = FnCANFdSetSTDDataLength(DataLength);
+
+	/*copy the original data; the bytes behind it stay 0 as padding*/
+	if (DataLength > RESET)
+		memcpy(u8DataAndPadd, ui8Data, DataLength);
+
+	/*add the frame to the Tx FIFO (the HAL copies it into the message RAM, so
+	  the local buffer can be reused right away) and return the HAL result;
+	  the transmission starts automatically, no Tx request call is needed*/
+	return HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &stFDCANTxHeader, u8DataAndPadd);
+
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	HAL_FDCAN_RxFifo0Callback
+ **@Descriptions		:	Overrides the weak HAL callback. It is called by HAL_FDCAN_IRQHandler
+ **						when Rx FIFO0 has received a new message (or has lost one). It must stay
+ **						short: it only signals the main loop (or copies the frame into the
+ **						ring buffer) and counts lost messages. No printf in here.
+ **@parameters			:	hfdcan		: handle of the FDCAN that raised the interrupt
+ **						RxFifo0ITs	: interrupt flags of Rx FIFO0 (FDCAN_IT_RX_FIFO0_x)
+ **@return				: 	None
+*****************************************************************************/
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *h, uint32_t RxFifo0ITs)
+{
+	/*every time a new message is added into the fifo, set a flag to indicate*/
+    if (RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE)
+    	{
+    	//do not add too many things here to keep the callback short
+    		stVarCANFD.ui8CANRxFameCount++;
+    	}
+
+    if (RxFifo0ITs & FDCAN_IT_RX_FIFO0_MESSAGE_LOST)
+    	stVarCANFD.ui8CANRxFameLost++;
+}
+
+
+/*****************************************************************************
+ **@Function 		  	: 	FnFDCANFrameParse
+ **@Descriptions		:	If Rx FIFO0 holds a frame, reads one frame, fills stVarCANFD (ID,
+ **						length, error state, time of processing) and calls
+ **						FnFDCANFrameProcess. One frame per call, so the main loop stays
+ **						responsive; call it on every pass of the main loop.
+ **@parameters			:	None
+ **@return				: 	None
+*****************************************************************************/
+void FnFDCANFrameParse(void)
+{
+	//check if there is the controller receive a CANFD frame
+	//Check how many frames are available in the fifo
+	if(HAL_FDCAN_GetRxFifoFillLevel(&hfdcan1, FDCAN_RX_FIFO0) > RESET )
+	{
+		_GREEN_LED_HIGH;
+
+		//read one frame, the data has been directly stored in the stVarCANFD.u8CANData
+		 if (HAL_FDCAN_GetRxMessage(&hfdcan1, FDCAN_RX_FIFO0, &stFDCANRxHeader, stVarCANFD.u8CANData.u8) != HAL_OK)
+			 FnFDCANFrameError();
+
+		 //parse and process the frame
+		 stVarCANFD.unCANID.u32  = stFDCANRxHeader.Identifier;
+		 stVarCANFD.u8CANDataLen = FnCANFdReadSTDDataLength(stFDCANRxHeader.DataLength);
+		 stVarCANFD.u32CANErrorStateIndicator = stFDCANRxHeader.ErrorStateIndicator;
+
+		 /*it will store the processing time period*/
+		 stVarCANFD.u32CANTimeHour = stVarTimer.u32TimerCount1hour;
+		 stVarCANFD.u32CANTimeMin  = stVarTimer.u32TimerCount1min;
+		 stVarCANFD.u32CANTimeSec  = stVarTimer.u32TimerCount1sec;
+		 stVarCANFD.u32CANTimeMiliSec = stVarTimer.u16TimerCount1000ms;
+
+		 /*
+		 stVarCANFD.u8CANFlags = (stFDCANRxHeader.IdType == FDCAN_EXTENDED_ID)
+							   | ((stFDCANRxHeader.FDFormat == FDCAN_FD_CAN) << 1)
+							   | ((stFDCANRxHeader.BitRateSwitch == FDCAN_BRS_ON) << 2)
+							   | ((stFDCANRxHeader.ErrorStateIndicator == FDCAN_ESI_PASSIVE) << 3);
+
+		*/
+
+		 FnFDCANFrameProcess(&stVarCANFD);
+		 stVarCANFD.ui8CANRxProcessCount++;
+		 _GREEN_LED_LOW;
+	}
+}
+
+
+
+/*****************************************************************************
+ **@Function 		  	: 	PUTCHAR_PROTOTYPE
+ **@Descriptions		: 	printf prototype
+ **@parameters			: 	None
+ **@return				: 	None
+*****************************************************************************/
+void FnFDCANFrameProcess(stCANFD *stVarCANFD)
+{
+
+	char s8PrintBuff[(uint8_t)200] = {'\0'};
+	uint8_t u8Index = RESET;
+	memset(s8PrintBuff, 0, sizeof(s8PrintBuff));
+	memset(stVarCANFD->s8CANDpayload, 0, sizeof(stVarCANFD->s8CANDpayload));
+
+	/*make a datastring*/
+	if (stVarCANFD->u8CANDataLen != FDCAN_DLC_BYTES_0)
+	{
+		u8Index += sprintf(&s8PrintBuff[u8Index],"[");
+
+		for (uint8_t u8Count = 0; u8Count < stVarCANFD->u8CANDataLen; u8Count++)
+			if (u8Count == stVarCANFD->u8CANDataLen - (uint8_t)1)
+				u8Index += sprintf(&s8PrintBuff[u8Index], "%02X]\0", stVarCANFD->u8CANData.u8[u8Count]);
+			else
+				u8Index += sprintf(&s8PrintBuff[u8Index], "%02X,", stVarCANFD->u8CANData.u8[u8Count]);
+	}
+	else
+	{
+		sprintf(s8PrintBuff[u8Index],"['0']\0");
+	}
+
+
+
+
+
+	sprintf((char *)stVarCANFD->s8CANDpayload,
+			"{'ft':'2',\r\n"
+			"'Time': '%02luh.%02lum.%02lus.%03lums',\r\n"
+			"'ID': '%02X %02X %02X %02X',\r\n"
+			"'Datalength': '%u',\r\n"
+			"'Data': '%s'}\r\n\n",
+			stVarCANFD->u32CANTimeHour, stVarCANFD->u32CANTimeMin,stVarCANFD->u32CANTimeSec, stVarCANFD->u32CANTimeMiliSec,
+			stVarCANFD->unCANID.u8[3], stVarCANFD->unCANID.u8[2], stVarCANFD->unCANID.u8[1], stVarCANFD->unCANID.u8[0],
+			stVarCANFD->u8CANDataLen,
+			s8PrintBuff);
+
+	printf("%s",stVarCANFD->s8CANDpayload);
+}
+
+/*****************************************************************************
+ **@Function 		  	: 	PUTCHAR_PROTOTYPE
+ **@Descriptions		: 	printf prototype
+ **@parameters			: 	None
+ **@return				: 	None
+*****************************************************************************/
+void FnFDCANFrameError(void)
+{
+
+}
+
+
+
+
+/* USER CODE END 1 */
+

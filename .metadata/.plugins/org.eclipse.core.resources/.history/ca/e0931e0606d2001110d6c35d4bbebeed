@@ -1,0 +1,159 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file    usart.c
+  * @brief   This file provides code for the configuration
+  *          of the USART instances.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/*------------------------------------------------------------------------------
+ *  Includes
+ * ---------------------------------------------------------------------------*/
+	#include "usart.h"
+
+
+
+
+
+/*------------------------------------------------------------------------------
+ *  hash definition
+ * ---------------------------------------------------------------------------*/
+#ifdef __GNUC__
+	#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+	#else
+	#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+
+/*------------------------------------------------------------------------------
+ *  Global variable
+ * ---------------------------------------------------------------------------*/
+	stUSART stVarUSART;
+
+
+/*------------------------------------------------------------------------------
+ *  function definition
+ * ---------------------------------------------------------------------------*/
+/*****************************************************************************
+ **@Function 		  	: 	PUTCHAR_PROTOTYPE (printf retarget)
+ **@Descriptions		:	Redirects the C library output so that printf prints on USART3.
+ **						With GCC the macro expands to __io_putchar, which the library calls
+ **						for each character. The character is sent by polling (waits until the
+ **						transmit register is empty), so printf blocks while it sends and must
+ **						not be used in an interrupt in the final application.
+ **@parameters			:	ch	: character to send
+ **@return				: 	the character that was sent
+*****************************************************************************/
+	//Redirecting all the printfs to the COM port
+	PUTCHAR_PROTOTYPE
+	{
+	  /* Place your implementation of fputc here */
+	  /* e.g. write a character to the USART */
+			LL_USART_TransmitData8(hdefCOM_PORT, (uint8_t) ch);
+
+	  /* Loop until transmit data register is empty */
+		// while (USART_GetFlagStatus(hdefCOM_PORT, USART_FLAG_TC) == RESET){}
+		/* Wait for TC flag to be raised for last char */
+			 while (LL_USART_IsActiveFlag_TXE(hdefCOM_PORT) == RESET){};
+
+	  return ch;
+	}
+
+
+/*****************************************************************************
+ **@Function 		  	: 	MX_USART3_UART_Init
+ **@Descriptions		:	CubeMX generated (LL). Initializes USART3, used for the serial
+ **						output (printf). Settings: <baud rate> baud, <word length>, <stop
+ **						bits>, <parity>, no hardware flow control. Also enables the
+ **						USART3 clock and configures its TX and RX pins.
+ **@parameters			:	None
+ **@return				: 	None
+*****************************************************************************/
+void MX_USART3_UART_Init(void)
+{
+
+  LL_USART_InitTypeDef USART_InitStruct = {0};
+  LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
+  LL_RCC_SetUSARTClockSource(LL_RCC_USART234578_CLKSOURCE_PCLK1);
+  /* Peripheral clock enable */
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_USART3);
+  LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_GPIOD);
+
+  /**USART3 GPIO Configuration
+  PD8   ------> USART3_TX
+  PD9   ------> USART3_RX */
+  GPIO_InitStruct.Pin = COM_TX_Pin|COM_RX_Pin;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
+  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_MEDIUM;
+  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  GPIO_InitStruct.Alternate = LL_GPIO_AF_7;
+  LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /* USART3 interrupt Init */
+  NVIC_SetPriority(USART3_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  NVIC_EnableIRQ(USART3_IRQn);
+
+  USART_InitStruct.PrescalerValue = LL_USART_PRESCALER_DIV1;
+  USART_InitStruct.BaudRate = 921600;
+  USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
+  USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
+  USART_InitStruct.Parity = LL_USART_PARITY_NONE;
+  USART_InitStruct.TransferDirection = LL_USART_DIRECTION_TX_RX;
+  USART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;
+  USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_8;
+  LL_USART_Init(hdefCOM_PORT, &USART_InitStruct);
+  LL_USART_SetTXFIFOThreshold(hdefCOM_PORT, LL_USART_FIFOTHRESHOLD_1_8);
+  LL_USART_SetRXFIFOThreshold(hdefCOM_PORT, LL_USART_FIFOTHRESHOLD_1_8);
+  LL_USART_DisableFIFO(hdefCOM_PORT);
+  LL_USART_ConfigAsyncMode(hdefCOM_PORT);
+
+  /* USER CODE BEGIN WKUPType USART3 */
+  /* USER CODE END WKUPType USART3 */
+  LL_USART_Enable(hdefCOM_PORT);
+
+  /* Polling USART3 initialisation */
+  while((!(LL_USART_IsActiveFlag_TEACK(hdefCOM_PORT))) || (!(LL_USART_IsActiveFlag_REACK(hdefCOM_PORT))))
+  {  }
+
+}
+
+
+void FnUsartCheckINTR(void)
+{
+/* called every 1 ms from the TIM3 interrupt */
+	static uint8_t u8Usater3msCount = RESET ;
+	if( stVarUSART.u8UsartRxIntStartFlag == SET )
+	{
+			u8Usater3msCount++ ;
+		if( stVarUSART.u8UsartRxIntFlag  == SET )
+		{
+			u8Usater3msCount  =
+			stVarUSART.u8UsartRxIntFlag  = RESET ;
+		}
+
+		/******** If the Time Duration Between two bytes increases  3ms
+		set the process flag for further processing  on the frame *********/
+		if( u8Usater3msCount >= (uint8_t)3 )
+		{
+			stVarUSART.u8UsartRxFrameFlag    = SET;
+			strcpy( stVarUSART.u8UsartRxFrmaeBuffer, stVarUSART.u8UsartRxBuffer);
+
+			u8Usater3msCount =
+			stVarUSART.u8UsartRxIntStartFlag =
+			stVarUSART.u8UsartRxDataCount 	 = RESET;
+		}
+	}
+}
+
+

@@ -1,0 +1,84 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file    tim.h
+  * @brief   This file contains all the function prototypes for
+  *          the tim.c file
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __TIM_H__
+#define __TIM_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*------------------------------------------------------------------------------
+ *  Includes
+ * ---------------------------------------------------------------------------*/
+	#include "main.h"
+
+/*------------------------------------------------------------------------------
+ *  Hash definition
+ * ---------------------------------------------------------------------------*/
+	#define hdefIWDG_RESET 	LL_IWDG_ReloadCounter(IWDG1);
+	#define hdefTIMER		TIM3
+
+/*------------------------------------------------------------------------------
+ *  Strcture definitions
+ * ---------------------------------------------------------------------------*/
+
+	/*********timer structure **********/
+	typedef struct
+	{
+
+	 uint8_t u8TimeFlag_5msec;  // This flag is used to perfrom the task with the frequncy of  5 ms
+	 uint8_t u8TimeFlag_10msec;  // This flag is used to perfrom the task with the frequncy of 10 ms
+	 uint8_t u8TimeFlag_100msec; // This flag is used to perfrom the task with the frequncy of 100 ms
+	 uint8_t u8TimeFlag_1sec;    // This flag is used to perfrom the task with the frequncy of 1 sec
+	 uint8_t u8TimeFlag_5sec;    // This flag is used to perfrom the task with the frequncy of 5 sec
+	 uint8_t u8TimeFlag_10sec;   // This flag is used to perfrom the task with the frequncy of 5 sec
+	 uint8_t u8TimeFlag_1min;    // This flag is used to perfrom the task with the frequncy of 1 min
+
+	 uint8_t u8TimerCount1ms    ; // Counter used to Count the 1 ms
+	 uint8_t u8TimerCount10ms   ; // Counter used to Count the 10 ms
+	 uint8_t u8TimerCount100ms  ; // Counter used to Count the 100 ms
+	 uint32_t u32TimerCount1sec ; // Counter used to Count the 1 s
+	 uint32_t u32TimerCount1min ; // Counter used to Count the 1 m
+	 uint32_t u32TimerCount1hour; // Counter used to Count the 1 h
+
+	 uint16_t u16TimerCount1000ms ; // Counter used to Count the 1000 ms
+
+	}stTimer;
+
+/*------------------------------------------------------------------------------
+ *  External variable
+ * ---------------------------------------------------------------------------*/
+	extern stTimer stVarTimer;
+
+/*------------------------------------------------------------------------------
+ * function global declaration
+ * ---------------------------------------------------------------------------*/
+	void MX_TIM3_Init(void);
+	void Configure_IWDG(void);
+	void FnTimeProcessEvents(void);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __TIM_H__ */
+

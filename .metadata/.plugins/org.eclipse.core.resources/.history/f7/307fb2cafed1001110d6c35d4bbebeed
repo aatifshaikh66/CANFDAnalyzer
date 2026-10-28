@@ -1,0 +1,78 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file    usart.h
+  * @brief   This file contains all the function prototypes for
+  *          the usart.c file
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __USART_H__
+#define __USART_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*------------------------------------------------------------------------------
+ *  Includes
+ * ---------------------------------------------------------------------------*/
+#include "main.h"
+
+
+/*------------------------------------------------------------------------------
+ *  Hash definitions
+ * ---------------------------------------------------------------------------*/
+
+	#define hdefCOM_PORT USART3
+
+	#define COM_TX_Pin LL_GPIO_PIN_8
+	#define COM_TX_GPIO_Port GPIOD
+	#define COM_RX_Pin LL_GPIO_PIN_9
+	#define COM_RX_GPIO_Port GPIOD
+
+	#define hdefCOM_MAX_BUFFER (uint8_t)250
+	#define hdefCOM_MAX_FRAME  (uint8_t)10
+
+
+/*------------------------------------------------------------------------------
+ *  Strcture definitions
+ * ---------------------------------------------------------------------------*/
+
+	typedef struct
+	{
+		uint8_t u8UsartRxIntFlag;
+		uint8_t u8UsartRxIntStartFlag;
+		uint8_t u8UsartRxIntStartCount;
+
+		uint8_t u8UsartRxBuffer[hdefCOM_MAX_BUFFER];
+		uint8_t u8UsartRxBufferArray[hdefCOM_MAX_FRAME][hdefCOM_MAX_BUFFER];
+
+	}stUSART;
+
+
+/*------------------------------------------------------------------------------
+ * function global declaration
+ * ---------------------------------------------------------------------------*/
+void MX_USART3_UART_Init(void);
+
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __USART_H__ */
+

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="completion_proposal_size">
+	</section>
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
+	</section>
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration.internal">
+		<item key="size.width" value="399"/>
+		<item key="size.height" value="180"/>
+	</section>
+	<section name="PDOMSearchPage">
+		<item key="caseSensitive" value="true"/>
+		<item key="searchFlags" value="227191"/>
+		<list key="previousPatterns">
+			<item value="ENABLE"/>
+			<item value="DISABLE"/>
+			<item value="FnHALCANFD_StandardDataLength"/>
+			<item value="HAL_FDCAN_ConfigTimestampCounter"/>
+			<item value="FnHALCANFD_TXConfig"/>
+			<item value="ui8CANRxFameFlag"/>
+			<item value="stCANFD"/>
+			<item value="NVIC_SetPriority"/>
+			<item value="LL_IWDG_Enable"/>
+			<item value="HAL_FDCAN_MspInit"/>
+			<item value="HAL_HSEM_MODULE_ENABLED"/>
+			<item value="HAL_FDCAN_RxFifo0Callback"/>
+			<item value="SystemClock_Config"/>
+			<item value="HAL_FDCAN_MODULE_ENABLED"/>
+			<item value="stm32h7xx_hal_fdcan"/>
+			<item value="stm32h7xx_hal_fdcanh"/>
+			<item value="LL_GPIO_SetOutputPin"/>
+		</list>
+	</section>
+	<section name="org.eclipse.cdt.internal.ui.typehierarchy.OpenTypeInHierarchyActionSettings">
+		<item key="show_namespaces" value="false"/>
+		<item key="show_classes" value="true"/>
+		<item key="show_structs" value="true"/>
+		<item key="show_typedefs" value="true"/>
+		<item key="show_enums" value="true"/>
+		<item key="show_unions" value="true"/>
+		<item key="show_functions" value="false"/>
+		<item key="show_variables" value="false"/>
+		<item key="show_enumerators" value="false"/>
+		<item key="show_macros" value="false"/>
+		<item key="show_concepts" value="false"/>
+		<item key="show_lowlevel" value="true"/>
+		<item key="x" value="2666"/>
+		<item key="y" value="74"/>
+		<item key="width" value="429"/>
+		<item key="height" value="663"/>
+	</section>
+</section>

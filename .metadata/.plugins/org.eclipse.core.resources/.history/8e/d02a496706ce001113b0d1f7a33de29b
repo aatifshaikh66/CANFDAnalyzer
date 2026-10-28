@@ -1,0 +1,80 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
+	#include "COMPort.h"
+
+/* Private includes ----------------------------------------------------------*/
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+#ifdef __GNUC__
+	#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+	#else
+	#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+	PUTCHAR_PROTOTYPE
+	{
+
+	  /* Place your implementation of fputc here */
+	  /* e.g. write a character to the USART */
+	  //USART_SendData(_DEBUGG_COM, (uint8_t) ch);
+			LL_USART_TransmitData8(_DEBUGG_COM, (uint8_t) ch);
+
+	  /* Loop until transmit data register is empty */
+		// while (USART_GetFlagStatus(_DEBUGG_COM, USART_FLAG_TC) == RESET){}
+		/* Wait for TC flag to be raised for last char */
+			 while (LL_USART_IsActiveFlag_TXE(_DEBUGG_COM) == RESET){};
+
+	  return ch;
+	}
+	/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+void FnSystemInit(void)
+{
+
+
+}
+
